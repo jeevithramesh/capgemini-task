@@ -1,0 +1,28 @@
+@import "src/variables.scss";
+
+td p-progressBar {
+  width: 50%;
+}
+
+::ng-deep .customProgress {
+  &.success {
+    .p-progressbar-value {
+      background: $color-success;
+    }
+  }
+  &.warning {
+    .p-progressbar-value {
+      background: $color-warning;
+    }
+  }
+  &.info {
+    .p-progressbar-value {
+      background: $color-info;
+    }
+  }
+  &.danger {
+    .p-progressbar-value {
+      background: $color-danger;
+    }
+  }
+}

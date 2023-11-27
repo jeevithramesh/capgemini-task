@@ -1,0 +1,93 @@
+<div class="m-4">
+  <p-card class="w-full md:w-1/3" header="Task Details">
+    <p-table [value]="tasks">
+      <ng-template pTemplate="header">
+        <tr>
+          <th>Task Name</th>
+          <th>Progress</th>
+          <th>Due Date</th>
+          <th>Action</th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-task>
+        <tr>
+          <td>{{ task.task_name }}</td>
+          <td>
+            <p-progressBar
+              [value]="task.progress"
+              [style]="{
+                height: '6px'
+              }"
+              [ngClass]="getColorForProgress(task.progress)"
+              class="customProgress"
+              mode="determinate"
+              [showValue]="false"
+            ></p-progressBar>
+          </td>
+          <td>{{ task.due_date | date : "yyyy-MM-dd" }}</td>
+          <td>
+            <div class="flex gap-2 flex-row">
+              <button
+                pButton
+                icon="pi pi-pencil"
+                (click)="showEditDialog(task)"
+              ></button>
+              <button
+                pButton
+                class="p-button-danger"
+                icon="pi pi-trash"
+                (click)="showDeleteDialog(task)"
+              ></button>
+            </div>
+          </td>
+        </tr>
+      </ng-template>
+    </p-table>
+  </p-card>
+
+  <p-dialog
+    header="Edit Task"
+    [(visible)]="displayDialog"
+    [modal]="true"
+    [responsive]="true"
+    [draggable]="false"
+    [resizable]="false"
+    [style]="{ width: '340px' }"
+  >
+    <div pDialogContent>
+      <form *ngIf="taskForm" [formGroup]="taskForm">
+        <div class="flex flex-col gap-6">
+          <div class="flex flex-col gap-2">
+            <label for="task_name">Task Name</label>
+            <input pInputText id="task_name" formControlName="task_name" />
+          </div>
+          <div class="flex flex-col gap-2">
+            <label for="progress"
+              >Progress ({{ taskForm.get("progress")?.value || 0 }}%)</label
+            >
+            <p-slider id="progress" formControlName="progress"></p-slider>
+          </div>
+          <div class="flex flex-col gap-2">
+            <label for="due_date">Due Date</label>
+            <input
+              pInputText
+              id="due_date"
+              formControlName="due_date"
+              type="date"
+            />
+          </div>
+        </div>
+      </form>
+    </div>
+    <div class="mt-4" pDialogFooter>
+      <div class="flex flex-row gap-2 justify-end">
+        <button pButton label="Cancel" (click)="closeEditDialog()"></button>
+        <button pButton label="Update" (click)="updateTask()"></button>
+      </div>
+    </div>
+  </p-dialog>
+
+  <p-confirmDialog header="Confirmation" icon="pi pi-exclamation-triangle">
+  </p-confirmDialog>
+  <p-toast [position]="'bottom-center'"></p-toast>
+</div>
